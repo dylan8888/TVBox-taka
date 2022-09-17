@@ -11,6 +11,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - userName: dylan8888
+            repoName: TVBox-taka
+            branchName: main
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -18,11 +25,13 @@ jobs:
           fetch-depth: 0
       - name: Check New Commit
         run: |
-          upStream=https://github.com/takagen99/Box
+          upStream=https://github.com/${{ matrix.userName }}/${{ matrix.repoName }}
           echo "upStream=$upStream" >> $GITHUB_ENV
           commit=$(curl -sL https://github.com/takagen99/Box/commits/main |grep -o "/takagen99/Box/commit/[a-z0-9]\+" |head -1 | cut -d\/ -f5)
+          commit2=$(curl -sL https://github.com/${{ matrix.userName }}/${{ matrix.repoName }}/commits/main |grep -o "/${{ matrix.userName }}/${{ matrix.repoName }}/commit/[a-z0-9]\+" |head -1 | cut -d\/ -f5)
           #if ! git log --oneline |grep -q "$commit"; then
-          if ! grep -q "$commit" README.md; then
+          #if ! grep -q "$commit" README.md; then
+          if [[ $commit != $commit2]]; then
             echo "commit=$commit" >> $GITHUB_ENV
             echo "commitS=${commit:0:7}" >> $GITHUB_ENV
           fi
@@ -79,7 +88,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: ${{ env.commit }}
         with:
-          name: dylan8888-TVBox-taka
+          name: ${{ matrix.userName }}-${{ matrix.repoName }}
           path: TVBoxOSC/apk/*
       - name: Release and Upload Assets
         uses: softprops/action-gh-release@v1
@@ -87,22 +96,22 @@ jobs:
         with:
           name: ${{ env.tag }}
           tag_name: ${{ env.tag }}
-          body: "Credit: dylan8888/TVBox-taka\n
+          body: "Credit: ${{ matrix.userName }}/${{ matrix.repoName }}\n
                  Commit: ${{ env.commit }}"
           files: |
             TVBoxOSC/apk/*
             TVBoxOSC/${{ env.commitS }}-source.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Push to master
-        if: ${{ env.commit }}
-        run: |
-          rm -rf TVBoxOSC
-          sed -i "/dylan8888\/TVBox-taka/s#Updated: [a-zA-Z0-9]*#Updated: ${{ env.commit }}#" README.md
-          sed -i '/url =/d' ./.git/config
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git remote set-url --add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
-          git add --all
-          git commit -m "${{ env.commit }}"
-          git push -u -f origin main
+#      - name: Push to master
+#        if: ${{ env.commit }}
+#        run: |
+#          rm -rf TVBoxOSC
+#          sed -i "/dylan8888\/TVBox-taka/s#Updated: [a-zA-Z0-9]*#Updated: ${{ env.commit }}#" README.md
+#          sed -i '/url =/d' ./.git/config
+#          git config --local user.name "github-actions[bot]"
+#          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+#          git remote set-url --add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+#          git add --all
+#          git commit -m "${{ env.commit }}"
+#          git push -u -f origin main
