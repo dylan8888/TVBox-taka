@@ -15,4 +15,4 @@ App default settings can be set here :
 
     }
 
-- [dylan8888/TVBox-taka](https://github.com/dylan8888/TVBox-taka) (Updated: 5b3e07784d16f26213c810a3ede821a161788ea4)
+- [dylan8888/TVBox-taka](https://github.com/dylan8888/TVBox-taka) (Updated: efb89c7d21bec6403a87233036ffda5935e51237)
