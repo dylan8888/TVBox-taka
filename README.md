@@ -14,3 +14,5 @@ App default settings can be set here :
         putDefault(HawkConfig.SEARCH_VIEW, 2);    // Text or Picture
 
     }
+
+- [dylan8888/TVBox-taka](https://github.com/dylan8888/TVBox-taka) (Updated: fd3387b6b21867d4bdd0e913b477eb3a2a095ee4)
