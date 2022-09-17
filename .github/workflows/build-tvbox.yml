@@ -31,7 +31,7 @@ jobs:
           commit2=$(curl -sL https://github.com/${{ matrix.userName }}/${{ matrix.repoName }}/commits/main |grep -o "/${{ matrix.userName }}/${{ matrix.repoName }}/commit/[a-z0-9]\+" |head -1 | cut -d\/ -f5)
           #if ! git log --oneline |grep -q "$commit"; then
           #if ! grep -q "$commit" README.md; then
-          if [[ $commit != $commit2]]; then
+          if [ "$commit" != "$commit2" ]; then
             echo "commit=$commit" >> $GITHUB_ENV
             echo "commitS=${commit:0:7}" >> $GITHUB_ENV
           fi
