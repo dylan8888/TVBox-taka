@@ -43,6 +43,8 @@ public class DefaultConfig {
             ArrayList<String> categories = sb.getCategories();
             if (!categories.isEmpty()) {
                 for (String cate : categories) {
+                    // 屏蔽直播
+                    if (cate.equals("直播")) continue;
                     for (MovieSort.SortData sortData : list) {
                         if (sortData.name.equals(cate)) {
                             if (sortData.filters == null)
@@ -53,6 +55,8 @@ public class DefaultConfig {
                 }
             } else {
                 for (MovieSort.SortData sortData : list) {
+                    // 屏蔽直播
+                    if (sortData.name.equals("直播")) continue;
                     if (sortData.filters == null)
                         sortData.filters = new ArrayList<>();
                     data.add(sortData);
